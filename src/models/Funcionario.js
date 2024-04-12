@@ -8,7 +8,7 @@ const FuncionarioSchema = new mongoose.Schema({
   data_expiracao_contrato: Date,
   descricao_funcao: String,
   desempenho: String,
-  foto_perfil: String, // URL da foto
-});
+  foto_perfil: String, 
+},{timeseries:true,timestamps:true,});
 
 module.exports = mongoose.model('Funcionario', FuncionarioSchema);
