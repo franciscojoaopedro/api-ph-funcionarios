@@ -3,7 +3,6 @@ const bycript=require("bcrypt")
 module.exports = {
   async store(req, res) {
     const { nome, email, senha, cargo, data_expiracao_contrato, descricao_funcao, desempenho } = req.body;
-
     
     const senha_incripada=await bycript.hash(senha,12)
 
@@ -51,6 +50,7 @@ module.exports = {
 
       const funcionario = await Funcionario.findByIdAndUpdate(funcionarioId, { desempenho }, { new: true });
 
+      Funcionario.aggregate()
       if (!funcionario) {
         return res.status(404).send({ error: 'Funcionário não encontrado' });
       }
@@ -60,5 +60,4 @@ module.exports = {
       return res.status(400).send(error);
     }
   },
-  // Adicione outros métodos conforme necessário
 };
