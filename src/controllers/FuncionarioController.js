@@ -2,12 +2,11 @@ const  Funcionario  = require('../models/Funcionario');
 const bycript=require("bcrypt")
 module.exports = {
   async store(req, res) {
-<<<<<<< HEAD
+
     const { nome, email, senha, cargo, data_expiracao_contrato, descricao_funcao, desempenho } = req.body;
     
     const senha_incripada=await bycript.hash(senha,12)
-=======
-    
+
     try {
       const { nome, email, senha, cargo, data_expiracao_contrato, descricao_funcao, desempenho } = req.body;
       const senhaFraca=senha.length;
@@ -17,7 +16,7 @@ module.exports = {
         return res.status(400).json({error:true,message:"Senha muito fraca"})
       }
       const senha_incripada=await bycript.hash(senha,12)
->>>>>>> 704c912203f7caf1b149b9296dabd54f19d6ab92
+
 
       const funcionario = await Funcionario.create({ nome, email, senha:senha_incripada, cargo, data_expiracao_contrato, descricao_funcao, desempenho });
       
@@ -103,11 +102,9 @@ module.exports = {
       return res.status(400).send(error);
     }
   },
-<<<<<<< HEAD
-};
-=======
-  async  verificarDominioNoEmail (req,res,next){
 
+  async  verificarDominioNoEmail (req,res,next){
+  
     try {
       const {email}=req.body
      if(!email.includes("@petrohost.ao")){
@@ -119,7 +116,7 @@ module.exports = {
     } catch (error) {
       return res.status(503).json({error:true,message:"Email com dominio invalido"})
     }
-
+  
   }
-};
->>>>>>> 704c912203f7caf1b149b9296dabd54f19d6ab92
+}
+
