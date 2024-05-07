@@ -2,15 +2,58 @@ const  Funcionario  = require('../models/Funcionario');
 const bycript=require("bcrypt")
 module.exports = {
   async store(req, res) {
+<<<<<<< HEAD
     const { nome, email, senha, cargo, data_expiracao_contrato, descricao_funcao, desempenho } = req.body;
     
     const senha_incripada=await bycript.hash(senha,12)
+=======
+    
+    try {
+      const { nome, email, senha, cargo, data_expiracao_contrato, descricao_funcao, desempenho } = req.body;
+      const senhaFraca=senha.length;
 
-    const funcionario = await Funcionario.create({ nome, email, senha:senha_incripada, cargo, data_expiracao_contrato, descricao_funcao, desempenho });
+      console.log(senhaFraca)
+      if(senhaFraca<7){
+        return res.status(400).json({error:true,message:"Senha muito fraca"})
+      }
+      const senha_incripada=await bycript.hash(senha,12)
+>>>>>>> 704c912203f7caf1b149b9296dabd54f19d6ab92
+
+      const funcionario = await Funcionario.create({ nome, email, senha:senha_incripada, cargo, data_expiracao_contrato, descricao_funcao, desempenho });
+      
+      return res.status(201).json({error:false,message:"Funcionario criado com sucesso",funcionario})
+    } catch (error) {
+      return res.status(503).json({error:true,message:"Erro ao registrar o Funcionario",messageError:error})
+    }
     
     
-    return res.json(funcionario);
   },
+  async get_funcionario(req,res){
+
+    try {
+      const funcionarios= await Funcionario.find().select("-senha")
+
+      return res.status(200).json({error:false,message:"Lista de todos funcionarios",funcionarios})
+    } catch (error) {
+      return res.status(200).json({error:true,message:"Erro ao listar funcionarios",messageError:error})
+    }
+  }
+  ,
+  async get_Ony_funcionario(req,res){
+    
+    try {
+      const {id}=req.params
+      if(!id){
+        return res.status(403).json({error:false,message:"ID nao fornecido"})
+      }
+      const funcionario= await Funcionario.findById(id).select("-senha")
+
+      return res.status(200).json({error:false,message:"Lista de todos funcionarios",funcionario})
+    } catch (error) {
+      return res.status(503).json({error:true,message:"Erro ao listar funcionarios",messageError:error})
+    }
+  }
+  ,
   async uploadFoto(req, res) {
     try {
       const { funcionarioId } = req.params;
@@ -60,4 +103,23 @@ module.exports = {
       return res.status(400).send(error);
     }
   },
+<<<<<<< HEAD
 };
+=======
+  async  verificarDominioNoEmail (req,res,next){
+
+    try {
+      const {email}=req.body
+     if(!email.includes("@petrohost.ao")){
+      return res.status(503).json({error:true,message:"Email com dominio invalido"})
+     }
+     const emailExist=await Funcionario.findOne({email:email})
+     if(emailExist)   return res.status(503).json({error:true,message:"Email ja existe ,por favor usar um outro email"})
+     next()
+    } catch (error) {
+      return res.status(503).json({error:true,message:"Email com dominio invalido"})
+    }
+
+  }
+};
+>>>>>>> 704c912203f7caf1b149b9296dabd54f19d6ab92
